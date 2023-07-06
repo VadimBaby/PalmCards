@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21754" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="DictionaryEntity" representedClassName="DictionaryEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="words" optional="YES" attributeType="Binary"/>
+    </entity>
+    <entity name="WordEntity" representedClassName="WordEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="examples" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="transcription" optional="YES" attributeType="String"/>
+        <attribute name="translate" optional="YES" attributeType="String"/>
+        <attribute name="translateExamples" optional="YES" attributeType="String"/>
+    </entity>
+</model>
