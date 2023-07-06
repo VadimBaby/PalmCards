@@ -9,15 +9,12 @@ import SwiftUI
 
 @main
 struct PalmCardsApp: App {
+    @StateObject var dictionaryViewModel: DictionaryViewModel = DictionaryViewModel()
+    
     var body: some Scene {
         WindowGroup {
-            VStack {
-                Image(systemName: "globe")
-                    .imageScale(.large)
-                    .foregroundColor(.accentColor)
-                Text("Hello, world!")
-            }
-            .padding()
+            BottomTabNavigators()
+                .environmentObject(dictionaryViewModel)
         }
     }
 }
