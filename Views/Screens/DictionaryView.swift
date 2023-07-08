@@ -14,7 +14,7 @@ struct DictionaryView: View {
         NavigationStack {
             ZStack{
                 if dictionaryViewModel.listDictionaries.isEmpty {
-                    VStack{}
+                    NoItemDictionaryView()
                 } else {
                     List {
                         ForEach(dictionaryViewModel.listDictionaries){ item in
