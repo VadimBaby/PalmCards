@@ -8,13 +8,44 @@
 import SwiftUI
 
 struct DictionaryView: View {
+    @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
+    
     var body: some View {
-        Text("Dictionary")
+        NavigationStack {
+            ZStack{
+                if dictionaryViewModel.listDictionaries.isEmpty {
+                    VStack{}
+                } else {
+                    List {
+                        ForEach(dictionaryViewModel.listDictionaries){ item in
+                            Text(item.name)
+                        }
+                    }
+                }
+            }
+            .navigationTitle("Словари")
+            .toolbar {
+                if(!dictionaryViewModel.listDictionaries.isEmpty) {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        EditButton()
+                            .tint(Color.red)
+                    }
+                }
+                
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: {}) {
+                        Image(systemName: "plus")
+                            .foregroundColor(Color.red)
+                    }
+                }
+            }
+        }
     }
 }
 
 struct DictionaryView_Previews: PreviewProvider {
     static var previews: some View {
         DictionaryView()
+            .environmentObject(DictionaryViewModel())
     }
 }
