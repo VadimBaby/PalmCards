@@ -11,6 +11,7 @@ struct DictionaryView: View {
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
     
     @State var showSheet: Bool = false
+    @State var search: String = ""
     
     var body: some View {
         NavigationStack {
@@ -19,14 +20,20 @@ struct DictionaryView: View {
                     NoItemDictionaryView()
                 } else {
                     List {
-                        ForEach(dictionaryViewModel.listDictionaries){ item in
+                        ForEach(filteredDictionaries){ item in
                             Text(item.name)
                         }
                         .onDelete(perform: dictionaryViewModel.deleteDictionary)
+                        
+                        if filteredDictionaries.isEmpty {
+                            Spacer()
+                                .listRowBackground(Color.clear)
+                        }
                     }
                 }
             }
             .sheet(isPresented: $showSheet, content: {AddDictionarySheet(showSheet: $showSheet)})
+            .searchable(text: $search, prompt: "Искать")
             .navigationTitle("Словари")
             .toolbar {
                 if(!dictionaryViewModel.listDictionaries.isEmpty) {
@@ -45,6 +52,14 @@ struct DictionaryView: View {
                     }
                 }
             }
+        }
+    }
+    
+    var filteredDictionaries: [DictionaryModel] {
+        if search.isEmpty {
+            return dictionaryViewModel.listDictionaries
+        } else {
+            return dictionaryViewModel.listDictionaries.filter {$0.name.lowercased().contains(search.lowercased())}
         }
     }
 }
