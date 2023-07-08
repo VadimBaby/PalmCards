@@ -20,6 +20,7 @@ struct DictionaryView: View {
                         ForEach(dictionaryViewModel.listDictionaries){ item in
                             Text(item.name)
                         }
+                        .onDelete(perform: dictionaryViewModel.deleteDictionary)
                     }
                 }
             }

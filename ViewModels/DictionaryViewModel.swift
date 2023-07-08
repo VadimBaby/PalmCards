@@ -11,6 +11,8 @@ import CoreData
 class DictionaryViewModel: ObservableObject {
     let manager = CoreDataManager.instance
     
+    @Published var saveEntities: [DictionaryEntity] = []
+    
     @Published var listDictionaries: [DictionaryModel] = []
     
     init() {
@@ -35,8 +37,20 @@ class DictionaryViewModel: ObservableObject {
                return DictionaryModel(id: id, name: name, words: words)
             }
             
+            saveEntities = entities
+            
         } catch let error {
             print("Error: \(error.localizedDescription)")
         }
+    }
+    
+    func deleteDictionary(indexSet: IndexSet) {
+        guard let index = indexSet.first else { return }
+        let entity = saveEntities[index]
+        manager.container.viewContext.delete(entity)
+        
+        manager.save()
+        
+        listDictionaries.remove(atOffsets: indexSet)
     }
 }
