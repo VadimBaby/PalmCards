@@ -53,4 +53,21 @@ class DictionaryViewModel: ObservableObject {
         
         listDictionaries.remove(atOffsets: indexSet)
     }
+    
+    func addDictionary(name: String) {
+        let newDictionary = DictionaryEntity(context: manager.container.viewContext)
+        
+        let words: [WordModel] = []
+        
+        guard let encodingData = try? JSONEncoder().encode(words) else { return }
+        
+        newDictionary.name = name
+        newDictionary.id = UUID().uuidString
+        newDictionary.words = encodingData
+        newDictionary.createDate = Date()
+        
+        manager.save()
+        
+        listDictionaries.insert(DictionaryModel(name: name), at: 0)
+    }
 }

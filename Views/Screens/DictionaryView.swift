@@ -10,6 +10,8 @@ import SwiftUI
 struct DictionaryView: View {
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
     
+    @State var showSheet: Bool = false
+    
     var body: some View {
         NavigationStack {
             ZStack{
@@ -24,6 +26,7 @@ struct DictionaryView: View {
                     }
                 }
             }
+            .sheet(isPresented: $showSheet, content: {AddDictionarySheet(showSheet: $showSheet)})
             .navigationTitle("Словари")
             .toolbar {
                 if(!dictionaryViewModel.listDictionaries.isEmpty) {
@@ -34,7 +37,9 @@ struct DictionaryView: View {
                 }
                 
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {}) {
+                    Button(action: {
+                        self.showSheet = true
+                    }) {
                         Image(systemName: "plus")
                             .foregroundColor(Color.red)
                     }
