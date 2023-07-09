@@ -49,7 +49,7 @@ class DictionaryViewModel: ObservableObject {
         let entity = saveEntities[index]
         manager.container.viewContext.delete(entity)
         
-        manager.save()
+        saveContext()
         
         listDictionaries.remove(atOffsets: indexSet)
     }
@@ -66,7 +66,7 @@ class DictionaryViewModel: ObservableObject {
         newDictionary.words = encodingData
         newDictionary.createDate = Date()
         
-        manager.save()
+        saveContext()
     }
     
     func getDictionary(id: String) -> DictionaryModel {
@@ -93,6 +93,11 @@ class DictionaryViewModel: ObservableObject {
         
         entity.words = decodeWords
         
+        saveContext()
+    }
+    
+    func saveContext() {
         manager.save()
+        getEntities()
     }
 }
