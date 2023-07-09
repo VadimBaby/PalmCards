@@ -21,7 +21,9 @@ struct DictionaryView: View {
                 } else {
                     List {
                         ForEach(filteredDictionaries){ item in
-                            Text(item.name)
+                            NavigationLink(destination: ListWordsView(id: item.id)) {
+                                Text(item.name)
+                            }
                         }
                         .onDelete(perform: dictionaryViewModel.deleteDictionary)
                         
@@ -42,7 +44,7 @@ struct DictionaryView: View {
                             .tint(Color.red)
                     }
                 }
-                
+            
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: {
                         self.showSheet = true
