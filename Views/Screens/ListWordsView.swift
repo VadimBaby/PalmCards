@@ -11,6 +11,8 @@ struct ListWordsView: View {
     var id: String
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
     
+    @State var showAddSheet: Bool = false
+    
     var dictionary: DictionaryModel {
         return dictionaryViewModel.getDictionary(id: id)
     }
@@ -34,6 +36,9 @@ struct ListWordsView: View {
                 }
             }
         }
+        .sheet(isPresented: $showAddSheet, content: {
+            AddWordSheet(showAddSheet: $showAddSheet, id: id)
+        })
         .navigationTitle(dictionary.name)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -43,7 +48,9 @@ struct ListWordsView: View {
                 })
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {}) {
+                Button(action: {
+                    self.showAddSheet = true
+                }) {
                     Image(systemName: "plus")
                         .tint(Color.red)
                 }

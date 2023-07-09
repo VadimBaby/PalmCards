@@ -67,13 +67,32 @@ class DictionaryViewModel: ObservableObject {
         newDictionary.createDate = Date()
         
         manager.save()
-        
-        listDictionaries.insert(DictionaryModel(name: name), at: 0)
     }
     
     func getDictionary(id: String) -> DictionaryModel {
         return listDictionaries.first { item in
             return item.id == id
         } ?? DictionaryModel(id: "error", name: "Error", words: [])
+    }
+    
+    func addWords(name: String, translate: String, transcription: String, examples: String, translateExamples: String, id: String) {
+        
+        guard let entity = saveEntities.first(where: {$0.id == id}) else { return }
+        guard let encodeWords = entity.words else { return }
+        guard var words = try? JSONDecoder().decode([WordModel].self, from: encodeWords) else { return }
+        
+        words.append(WordModel(
+            name: name,
+            translate: translate,
+            examples: examples,
+            translateExamples: translateExamples,
+            transcription: transcription
+        ))
+        
+        guard let decodeWords = try? JSONEncoder().encode(words) else { return }
+        
+        entity.words = decodeWords
+        
+        manager.save()
     }
 }
