@@ -11,6 +11,7 @@ struct AddWordSheet: View {
     @Binding var showAddSheet: Bool
     var id: String
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
+    @Environment(\.dismiss) var dismiss
     
     @State var nameTextField: String = ""
     @State var translateTextField: String = ""
@@ -32,12 +33,6 @@ struct AddWordSheet: View {
     
     var body: some View {
         ZStack{
-            Color("background")
-                .ignoresSafeArea()
-                .onTapGesture {
-                    focusedTextField = nil
-                }
-            
             VStack{
                 HStack{
                     Spacer()
@@ -136,6 +131,9 @@ struct AddWordSheet: View {
                 .disabled(nameTextField.trimmingCharacters(in: .whitespacesAndNewlines) == "" || translateTextField.trimmingCharacters(in: .whitespacesAndNewlines) == "" ? true : false)
                 Spacer()
             }
+        }
+        .onTapGesture {
+            focusedTextField = nil
         }
     }
 }

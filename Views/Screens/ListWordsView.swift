@@ -13,6 +13,9 @@ struct ListWordsView: View {
     
     @State var showAddSheet: Bool = false
     
+    @State var search: String = ""
+    @State var chag: Bool = false
+    
     var dictionary: DictionaryModel {
         return dictionaryViewModel.getDictionary(id: id)
     }
@@ -23,7 +26,7 @@ struct ListWordsView: View {
                 NoItemListWordsView()
             } else {
                 List {
-                    ForEach(dictionary.words) { item in
+                    ForEach(filteredWords) { item in
                         HStack{
                             Text(item.name)
                                 .font(.headline)
@@ -35,6 +38,11 @@ struct ListWordsView: View {
                     }
                     .onDelete { IndexSet in
                         dictionaryViewModel.deleteWord(indexSet: IndexSet, id: id)
+                    }
+                    
+                    if filteredWords.isEmpty {
+                        Spacer()
+                            .listRowBackground(Color.clear)
                     }
                 }
             }
@@ -59,7 +67,20 @@ struct ListWordsView: View {
                 }
             }
         }
-
+        .searchable(text: $search, placement: chag || UIDevice.current.userInterfaceIdiom == .pad ? .toolbar : .navigationBarDrawer(displayMode: .always) ,prompt: "Искать")
+        .onAppear{
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: {
+                self.chag = true
+            })
+        }
+    }
+    
+    var filteredWords: [WordModel] {
+        if search.isEmpty {
+            return dictionary.words
+        } else {
+            return dictionary.words.filter{$0.name.lowercased().contains(search.lowercased()) || $0.translate.lowercased().contains(search.lowercased())}
+        }
     }
 }
 
