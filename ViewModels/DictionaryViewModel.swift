@@ -69,6 +69,14 @@ class DictionaryViewModel: ObservableObject {
         saveContext()
     }
     
+    func renameDictionary(newName: String, id: String){
+        guard var dictionary = saveEntities.first(where: {$0.id == id}) else { return }
+        
+        dictionary.name = newName
+        
+        saveContext()
+    }
+    
     func getDictionary(id: String) -> DictionaryModel {
         return listDictionaries.first { item in
             return item.id == id
@@ -97,8 +105,8 @@ class DictionaryViewModel: ObservableObject {
     }
     
     func deleteWord(indexSet: IndexSet, id: String) {
-        guard var dictionary = saveEntities.first(where: {$0.id == id}) else { return }
-        guard var encodeWords = dictionary.words else { return }
+        guard let dictionary = saveEntities.first(where: {$0.id == id}) else { return }
+        guard let encodeWords = dictionary.words else { return }
         guard var words = try? JSONDecoder().decode([WordModel].self, from: encodeWords) else { return }
         
         words.remove(atOffsets: indexSet)

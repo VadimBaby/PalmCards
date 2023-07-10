@@ -12,6 +12,7 @@ struct ListWordsView: View {
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
     
     @State var showAddSheet: Bool = false
+    @State var showRenameSheet: Bool = false
     
     @State var search: String = ""
     @State var chag: Bool = false
@@ -51,6 +52,9 @@ struct ListWordsView: View {
                 .environment(\.editMode, $editMode)
             }
         }
+        .sheet(isPresented: $showRenameSheet, content: {
+            RenameDictionarySheet(showSheet: $showRenameSheet, id: id, oldNameDictionary: dictionary.name)
+        })
         .sheet(isPresented: $showAddSheet, content: {
             AddWordSheet(showAddSheet: $showAddSheet, id: id)
         })
@@ -60,7 +64,9 @@ struct ListWordsView: View {
                 EditButtonComponent(editMode: $editMode)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {}, label: {
+                Button(action: {
+                    self.showRenameSheet = true
+                }, label: {
                     Image(systemName: "pencil")
                         .tint(Color.red)
                 })
