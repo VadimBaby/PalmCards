@@ -50,6 +50,12 @@ struct ListWordsView: View {
                 }
                 .animation(.easeInOut, value: editMode)
                 .environment(\.editMode, $editMode)
+                .searchable(text: $search, placement: chag || UIDevice.current.userInterfaceIdiom == .pad ? .toolbar : .navigationBarDrawer(displayMode: .always) ,prompt: "Искать")
+                .onAppear{
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: {
+                        self.chag = true
+                    })
+                }
             }
         }
         .sheet(isPresented: $showRenameSheet, content: {
@@ -79,12 +85,6 @@ struct ListWordsView: View {
                         .tint(Color.red)
                 }
             }
-        }
-        .searchable(text: $search, placement: chag || UIDevice.current.userInterfaceIdiom == .pad ? .toolbar : .navigationBarDrawer(displayMode: .always) ,prompt: "Искать")
-        .onAppear{
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6, execute: {
-                self.chag = true
-            })
         }
     }
     

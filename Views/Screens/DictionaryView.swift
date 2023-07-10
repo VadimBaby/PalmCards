@@ -36,10 +36,10 @@ struct DictionaryView: View {
                     }
                     .animation(.easeInOut, value: editMode)
                     .environment(\.editMode, $editMode)
+                    .searchable(text: $search, prompt: "Искать")
                 }
             }
             .sheet(isPresented: $showSheet, content: {AddDictionarySheet(showSheet: $showSheet)})
-            .searchable(text: $search, prompt: "Искать")
             .navigationTitle("Словари")
             .toolbar {
                 if(!dictionaryViewModel.listDictionaries.isEmpty) {
