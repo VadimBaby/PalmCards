@@ -16,6 +16,8 @@ struct ListWordsView: View {
     @State var search: String = ""
     @State var chag: Bool = false
     
+    @State private var editMode: EditMode = .inactive
+    
     var dictionary: DictionaryModel {
         return dictionaryViewModel.getDictionary(id: id)
     }
@@ -45,6 +47,8 @@ struct ListWordsView: View {
                             .listRowBackground(Color.clear)
                     }
                 }
+                .animation(.easeInOut, value: editMode)
+                .environment(\.editMode, $editMode)
             }
         }
         .sheet(isPresented: $showAddSheet, content: {
@@ -52,6 +56,9 @@ struct ListWordsView: View {
         })
         .navigationTitle(dictionary.name)
         .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                EditButtonComponent(editMode: $editMode)
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button(action: {}, label: {
                     Image(systemName: "pencil")

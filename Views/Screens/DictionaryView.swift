@@ -13,6 +13,8 @@ struct DictionaryView: View {
     @State var showSheet: Bool = false
     @State var search: String = ""
     
+    @State private var editMode: EditMode = .inactive
+    
     var body: some View {
         NavigationStack {
             ZStack{
@@ -32,6 +34,8 @@ struct DictionaryView: View {
                                 .listRowBackground(Color.clear)
                         }
                     }
+                    .animation(.easeInOut, value: editMode)
+                    .environment(\.editMode, $editMode)
                 }
             }
             .sheet(isPresented: $showSheet, content: {AddDictionarySheet(showSheet: $showSheet)})
@@ -40,8 +44,7 @@ struct DictionaryView: View {
             .toolbar {
                 if(!dictionaryViewModel.listDictionaries.isEmpty) {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        EditButton()
-                            .tint(Color.red)
+                        EditButtonComponent(editMode: $editMode)
                     }
                 }
             
