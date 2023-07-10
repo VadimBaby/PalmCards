@@ -33,6 +33,9 @@ struct ListWordsView: View {
                                 .foregroundColor(Color.secondary)
                         }
                     }
+                    .onDelete { IndexSet in
+                        dictionaryViewModel.deleteWord(indexSet: IndexSet, id: id)
+                    }
                 }
             }
         }

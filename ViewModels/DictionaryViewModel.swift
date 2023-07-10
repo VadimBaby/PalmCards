@@ -96,6 +96,20 @@ class DictionaryViewModel: ObservableObject {
         saveContext()
     }
     
+    func deleteWord(indexSet: IndexSet, id: String) {
+        guard var dictionary = saveEntities.first(where: {$0.id == id}) else { return }
+        guard var encodeWords = dictionary.words else { return }
+        guard var words = try? JSONDecoder().decode([WordModel].self, from: encodeWords) else { return }
+        
+        words.remove(atOffsets: indexSet)
+        
+        guard let decodeWords = try? JSONEncoder().encode(words) else { return }
+        
+        dictionary.words = decodeWords
+        
+        saveContext()
+    }
+    
     func saveContext() {
         manager.save()
         getEntities()
