@@ -50,8 +50,6 @@ class DictionaryViewModel: ObservableObject {
         manager.container.viewContext.delete(entity)
         
         saveContext()
-        
-        listDictionaries.remove(atOffsets: indexSet)
     }
     
     func addDictionary(name: String) {
@@ -70,7 +68,7 @@ class DictionaryViewModel: ObservableObject {
     }
     
     func renameDictionary(newName: String, id: String){
-        guard var dictionary = saveEntities.first(where: {$0.id == id}) else { return }
+        guard let dictionary = saveEntities.first(where: {$0.id == id}) else { return }
         
         dictionary.name = newName
         
