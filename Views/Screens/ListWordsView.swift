@@ -20,7 +20,7 @@ struct ListWordsView: View {
     var body: some View {
         ZStack{
             if dictionary.words.isEmpty {
-                VStack{}
+                NoItemListWordsView()
             } else {
                 List {
                     ForEach(dictionary.words) { item in
