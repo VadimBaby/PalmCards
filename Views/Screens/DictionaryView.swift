@@ -18,6 +18,8 @@ struct DictionaryView: View {
     var body: some View {
         NavigationStack {
             ZStack{
+                BackgroundColor()
+                
                 if dictionaryViewModel.listDictionaries.isEmpty {
                     NoItemDictionaryView()
                 } else {

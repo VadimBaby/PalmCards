@@ -25,6 +25,8 @@ struct ListWordsView: View {
     
     var body: some View {
         ZStack{
+            BackgroundColor()
+            
             if dictionary.words.isEmpty {
                 NoItemListWordsView()
             } else {

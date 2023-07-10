@@ -9,7 +9,11 @@ import SwiftUI
 
 struct PlayView: View {
     var body: some View {
-        Text("PlayView")
+        ZStack {
+            BackgroundColor()
+            
+            Text("PlayView")
+        }
     }
 }
 
