@@ -39,6 +39,8 @@ struct EditWordView: View {
     
     @FocusState private var focusTextField: FocusTextField?
     
+    @State var showReplaceWordSheet: Bool = false
+    
     var body: some View {
         ZStack{
             BackgroundColor()
@@ -152,12 +154,26 @@ struct EditWordView: View {
                 focusTextField = nil
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    self.showReplaceWordSheet = true
+                }, label: {
+                    Image(systemName: "lasso.and.sparkles")
+                        .tint(Color.red)
+                })
+                .disabled(dictionaryViewModel.listDictionaries.count < 2)
+            }
+        }
         .onAppear{
             nameTextField = word.name
             translateTextField = word.translate
             transcriptionTextField = word.transcription
             examplesTextField = word.examples
             translateExamplesTextField = word.translateExamples
+        }
+        .sheet(isPresented: $showReplaceWordSheet) {
+            ReplaceWordSheet(showReplaceWordSheet: $showReplaceWordSheet, idDictionary: idDictionary, idWord: word.id){ dismiss() }
         }
     }
     

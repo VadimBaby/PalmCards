@@ -137,6 +137,33 @@ class DictionaryViewModel: ObservableObject {
         saveContext()
     }
     
+    func replaceWordToAnotherDictionary(idThisDictionary: String, idToDictionary: String, idWord: String) {
+        
+        guard let dictionary = saveEntities.first(where: {$0.id == idThisDictionary}) else { return }
+        guard let encodeWords = dictionary.words else { return }
+        guard var words = try? JSONDecoder().decode([WordModel].self, from: encodeWords) else { return }
+        
+        guard let word = words.first(where: {$0.id == idWord}) else { return }
+        
+        words = words.filter{$0.id != word.id}
+        
+        guard let decodeWords = try? JSONEncoder().encode(words) else { return }
+        
+        dictionary.words = decodeWords
+        
+        guard let toDictionary = saveEntities.first(where: {$0.id == idToDictionary}) else { return }
+        guard let toEncodeWords = toDictionary.words else { return }
+        guard var toWords = try? JSONDecoder().decode([WordModel].self, from: toEncodeWords) else { return }
+        
+        toWords.append(word)
+        
+        guard let toDecodeWords = try? JSONEncoder().encode(toWords) else { return }
+        
+        toDictionary.words = toDecodeWords
+        
+        saveContext()
+    }
+    
     func saveContext() {
         manager.save()
         getEntities()
