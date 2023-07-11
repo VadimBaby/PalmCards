@@ -32,13 +32,15 @@ struct ListWordsView: View {
             } else {
                 List {
                     ForEach(filteredWords) { item in
-                        HStack{
-                            Text(item.name)
-                                .font(.headline)
-                            Spacer()
-                            Text(item.translate)
-                                .font(.footnote)
-                                .foregroundColor(Color.secondary)
+                        NavigationLink(destination: EditWordView(idDictionary: id, word: item)) {
+                            HStack{
+                                Text(item.name)
+                                    .font(.headline)
+                                Spacer()
+                                Text(item.translate)
+                                    .font(.footnote)
+                                    .foregroundColor(Color.secondary)
+                            }
                         }
                     }
                     .onDelete { IndexSet in
