@@ -15,7 +15,14 @@ class Settings: ObservableObject {
         }
     }
     
+    @Published var hideExample: Bool = false {
+        didSet {
+            UserDefaults.standard.set(hideExample, forKey: "hideExample")
+        }
+    }
+    
     init() {
         firstShowTranslate = UserDefaults.standard.bool(forKey: "firstShowTranslate")
+        hideExample = UserDefaults.standard.bool(forKey: "hideExample")
     }
 }

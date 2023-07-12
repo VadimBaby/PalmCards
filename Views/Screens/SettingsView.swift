@@ -18,6 +18,7 @@ struct SettingsView: View {
                 List {
                     Section("Игра") {
                         Toggle("Показывать сначала перевод", isOn: $settings.firstShowTranslate)
+                        Toggle("Скрывать примеры", isOn: $settings.hideExample)
                     }
                     .tint(Color.red)
                 }
