@@ -8,11 +8,21 @@
 import SwiftUI
 
 struct SettingsView: View {
+    @EnvironmentObject var settings: Settings
+    
     var body: some View {
-        ZStack {
-            BackgroundColor()
-            
-            Text("SettingsView")
+        NavigationStack{
+            ZStack {
+                BackgroundColor()
+                
+                List {
+                    Section("Игра") {
+                        Toggle("Показывать сначала перевод", isOn: $settings.firstShowTranslate)
+                    }
+                    .tint(Color.red)
+                }
+            }
+            .navigationTitle("Настройки")
         }
     }
 }
@@ -20,5 +30,6 @@ struct SettingsView: View {
 struct SettingsView_Previews: PreviewProvider {
     static var previews: some View {
         SettingsView()
+            .environmentObject(Settings())
     }
 }
