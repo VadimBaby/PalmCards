@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct PalmCardsApp: App {
     @StateObject var dictionaryViewModel: DictionaryViewModel = DictionaryViewModel()
+    @StateObject var settings: Settings = Settings()
     
     var body: some Scene {
         WindowGroup {
             BottomTabNavigators()
                 .environmentObject(dictionaryViewModel)
+                .environmentObject(settings)
         }
     }
 }
