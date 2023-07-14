@@ -123,6 +123,45 @@ struct PlayView: View {
             .onReceive(playViewModel.$islistWordsFromSelectDictionariesEmpty) { newValue in
                 playViewModel.isBothOfListEmpty = newValue || dictionaryViewModel.listDictionaries.isEmpty
             }
+            .onAppear{
+                guard !dictionaryViewModel.listDictionaries.isEmpty else {
+                    playViewModel.selectDictionaries = []
+                    
+                    guard let encodingData = try? JSONEncoder().encode(playViewModel.selectDictionaries) else { return }
+                    
+                    UserDefaults.standard.set(encodingData, forKey: "selectDictionaries")
+                    
+                    return
+                }
+                
+                guard let data = UserDefaults.standard.data(forKey: "selectDictionaries") else { return }
+                
+                guard let savedItems = try? JSONDecoder().decode([String].self, from: data) else { return }
+                
+                var listDeletedDictionaries: [String] = []
+                
+                // в listDeletedDictionaries добавляем id тех словарей, которые содержится в сохраненной в память переменной chosenDictionaries, но не содержится в списке словарей
+                
+                savedItems.forEach { item in
+                    if !dictionaryViewModel.listDictionaries.contains(where: {$0.id == item}) {
+                        listDeletedDictionaries.append(item)
+                    }
+                }
+                
+                // если переменная пустая, то делаем просто инициализацию, в ином случае из takeSavedItems извлекаем словари, которых не существует и сохраняем измененую переменную
+
+                if listDeletedDictionaries.isEmpty {
+                    playViewModel.selectDictionaries = savedItems
+                } else {
+                    playViewModel.selectDictionaries = savedItems.filter({ item in
+                        return !listDeletedDictionaries.contains(item)
+                    })
+                    
+                    guard let encodingData = try? JSONEncoder().encode(playViewModel.selectDictionaries) else { return }
+                    
+                    UserDefaults.standard.set(encodingData, forKey: "selectDictionaries")
+                }
+            }
         }
     }
 }
