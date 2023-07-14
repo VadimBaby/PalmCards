@@ -22,9 +22,6 @@ class DictionaryViewModel: ObservableObject {
     func getEntities() {
         let request = NSFetchRequest<DictionaryEntity>(entityName: "DictionaryEntity")
         
-        let sort = NSSortDescriptor(keyPath: \DictionaryEntity.createDate, ascending: true)
-        request.sortDescriptors = [sort]
-        
         do{
             let entities: [DictionaryEntity] = try manager.context.fetch(request)
             
@@ -37,7 +34,7 @@ class DictionaryViewModel: ObservableObject {
                return DictionaryModel(id: id, name: name, words: words)
             }
             
-            saveEntities = entities
+            saveEntities = entities.sorted(by: {$0.createDate ?? Date() > $1.createDate ?? Date()})
             
         } catch let error {
             print("Error: \(error.localizedDescription)")
