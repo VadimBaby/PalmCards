@@ -6,13 +6,49 @@
 //
 
 import SwiftUI
+import Combine
+
+class PlayViewModel: ObservableObject {
+    
+    @Published var selectDictionaries: [String] = []
+    @Published var listWordsFromSelectDictionaries: [WordModel] = []
+    @Published var islistWordsFromSelectDictionariesEmpty = true
+    @Published var isBothOfListEmpty = true
+    
+    var cancellables = Set<AnyCancellable>()
+    
+    init() {
+        addIslistWordsFromSelectDictionariesEmpty()
+    }
+    
+    deinit {
+        for item in cancellables {
+            item.cancel()
+        }
+    }
+    
+    func addIslistWordsFromSelectDictionariesEmpty() {
+        $listWordsFromSelectDictionaries
+            .map { (listWords) -> Bool in
+                return listWords.isEmpty
+            }
+            .sink { [weak self] isEmpty in
+                guard let self = self else { return }
+                
+                self.islistWordsFromSelectDictionariesEmpty = isEmpty
+            }
+            .store(in: &cancellables)
+    }
+}
 
 struct PlayView: View {
+    @StateObject var playViewModel = PlayViewModel()
+    
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
     @EnvironmentObject var settings: Settings
+    
     @State private var doCardsNavigate: Bool = false
     @State private var doWritingNavigate: Bool = false
-    @State var chosenDictionaries: [String] = []
 
     let listOfTypeGames = ["cards", "write words"]
     
@@ -28,7 +64,11 @@ struct PlayView: View {
                         VStack{
                             List {
                                 ForEach(dictionaryViewModel.listDictionaries) { dictionary in
-                                    Text(dictionary.name)
+                                    ItemListSelectDictionary(
+                                        selectDictionaries: $playViewModel.selectDictionaries,
+                                        name: dictionary.name,
+                                        id: dictionary.id
+                                    )
                                 }
                             }
                             .frame(height: 400)
@@ -38,17 +78,51 @@ struct PlayView: View {
                     Spacer()
                     
                     Button(action: {}) {
-                        Text("Играть")
-                            .tint(Color.white)
+                        Text(playViewModel.islistWordsFromSelectDictionariesEmpty ? "У вас нет слов" : "Играть")
+                            .foregroundColor(
+                                playViewModel.islistWordsFromSelectDictionariesEmpty ? Color.red : Color.white)
                             .frame(maxWidth: .infinity)
                             .frame(height: 55)
-                            .background(Color.blue)
+                            .background(playViewModel.isBothOfListEmpty ? Color.gray.opacity(0.2) : Color.blue)
                             .cornerRadius(15)
                             .padding()
                     }
+                    .disabled(playViewModel.isBothOfListEmpty)
                 }
             }
             .navigationTitle("Играть")
+            .onReceive(playViewModel.$selectDictionaries) { listOfId in
+                
+                var listWords: [WordModel] = []
+                
+                if !listOfId.isEmpty {
+                    for id in listOfId {
+                        let dictionary = self.dictionaryViewModel.getDictionary(id: id)
+                        
+                        listWords += dictionary.words
+                    }
+                }
+                
+                playViewModel.listWordsFromSelectDictionaries = listWords
+            }
+            .onReceive(dictionaryViewModel.$listDictionaries) { listDictionaries in
+                var listWords: [WordModel] = []
+                
+                if !playViewModel.selectDictionaries.isEmpty {
+                    for id in playViewModel.selectDictionaries {
+                        let dictionary = self.dictionaryViewModel.getDictionary(id: id)
+                        
+                        listWords += dictionary.words
+                    }
+                }
+                
+                playViewModel.listWordsFromSelectDictionaries = listWords
+                
+                playViewModel.isBothOfListEmpty = listDictionaries.isEmpty || playViewModel.islistWordsFromSelectDictionariesEmpty
+            }
+            .onReceive(playViewModel.$islistWordsFromSelectDictionariesEmpty) { newValue in
+                playViewModel.isBothOfListEmpty = newValue || dictionaryViewModel.listDictionaries.isEmpty
+            }
         }
     }
 }
