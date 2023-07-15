@@ -29,4 +29,15 @@ class CardsGameLogic: ObservableObject {
     }
     
     @Published var guessMoment: GuessMoment = .rotate
+    
+    func startGame(shuffledWords: [WordModel], setFirstShowTranslate: Bool, setHideExample: Bool){
+        firstShowTranslate = setFirstShowTranslate
+        hideExample = setHideExample
+        shuffleWords = shuffledWords.shuffled()
+        countWords = shuffledWords.count
+        title = firstShowTranslate ? shuffleWords[0].translate : shuffleWords[0].name
+        upTitle = firstShowTranslate ? shuffleWords[0].translateExamples : shuffleWords[0].examples
+        downTitle = firstShowTranslate ? "" : shuffleWords[0].transcription
+        lastIndexElement = shuffleWords.count - 1
+    }
 }
