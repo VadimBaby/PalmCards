@@ -48,7 +48,7 @@ struct PlayView: View {
     @EnvironmentObject var settings: Settings
     
     @State private var doCardsNavigate: Bool = false
-    @State private var doWritingNavigate: Bool = false
+    @State private var doWriteNavigate: Bool = false
 
     let listOfTypeGames = ["cards", "write words"]
     
@@ -77,7 +77,13 @@ struct PlayView: View {
                     
                     Spacer()
                     
-                    Button(action: {}) {
+                    Button(action: {
+                        if settings.selectTypeOfGame == .writing {
+                            doWriteNavigate.toggle()
+                        } else {
+                            doCardsNavigate.toggle()
+                        }
+                    }) {
                         Text(playViewModel.islistWordsFromSelectDictionariesEmpty ? "У вас нет слов" : "Играть")
                             .foregroundColor(
                                 playViewModel.islistWordsFromSelectDictionariesEmpty ? Color.red : Color.white)
@@ -88,6 +94,20 @@ struct PlayView: View {
                             .padding()
                     }
                     .disabled(playViewModel.isBothOfListEmpty)
+                    
+                    NavigationLink(value: "CardsPlayingView", label: {
+                        EmptyView()
+                    })
+                    .navigationDestination(isPresented: $doCardsNavigate) {
+                        CardsPlayingView()
+                    }
+                    
+                    NavigationLink(value: "WritePlayingView", label: {
+                        EmptyView()
+                    })
+                    .navigationDestination(isPresented: $doWriteNavigate) {
+                        WritePlayingView()
+                    }
                 }
             }
             .navigationTitle("Играть")
