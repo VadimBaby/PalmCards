@@ -14,6 +14,8 @@ struct CardsPlayingView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
+    @StateObject var gameLogic: CardsGameLogic = CardsGameLogic()
+    
     var body: some View {
         ZStack{
             BackgroundColor()
