@@ -12,7 +12,7 @@ class Settings: ObservableObject {
     
     public enum TypesGame: String, Equatable, CaseIterable {
         case cards
-        case writing
+        case write
         
         var localizedName: LocalizedStringKey {
             if rawValue == "cards" {
@@ -53,7 +53,7 @@ class Settings: ObservableObject {
             if checkSelectTypeOfGame == "cards" {
                 selectTypeOfGame = .cards
             } else if checkSelectTypeOfGame == "writing" {
-                selectTypeOfGame = .writing
+                selectTypeOfGame = .write
             }
         } else {
             selectTypeOfGame = .cards

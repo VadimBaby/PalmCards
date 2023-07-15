@@ -78,7 +78,7 @@ struct PlayView: View {
                     Spacer()
                     
                     Button(action: {
-                        if settings.selectTypeOfGame == .writing {
+                        if settings.selectTypeOfGame == .write {
                             doWriteNavigate.toggle()
                         } else {
                             doCardsNavigate.toggle()
