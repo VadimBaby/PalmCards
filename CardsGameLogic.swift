@@ -51,6 +51,24 @@ class CardsGameLogic: ObservableObject {
         downTitle = getDownTitleAfterPressFlipButton()
     }
     
+    func pressCheckMarkButton() {
+        toggleGuessMoment()
+        
+        if indexShuffleWords <= lastIndexElement  {
+            countRightAnswers += 1
+        }
+        
+        guard shuffleWords.count - 1 > indexShuffleWords else { showResults = true; return }
+        
+        indexShuffleWords += 1
+        
+        upTitle = getUpTitleAfterPressMarkButton()
+        title = getTitleAfterPressMarkButton()
+        downTitle = getDownTitleAfterPressMarkButton()
+        
+        countWords -= 1
+    }
+    
     func toggleGuessMoment() {
         if guessMoment == .select {
             guessMoment = .rotate
@@ -73,5 +91,21 @@ class CardsGameLogic: ObservableObject {
     
     private func getDownTitleAfterPressFlipButton() -> String {
         return firstShowTranslate ? shuffleWords[indexShuffleWords].transcription : ""
+    }
+    
+    // After Press Mark Button
+    
+    private func getUpTitleAfterPressMarkButton() -> String {
+        guard !hideExample else { return "" }
+        
+        return firstShowTranslate ? shuffleWords[indexShuffleWords].translateExamples : shuffleWords[indexShuffleWords].examples
+    }
+    
+    private func getTitleAfterPressMarkButton() -> String {
+        return firstShowTranslate ? shuffleWords[indexShuffleWords].translate : shuffleWords[indexShuffleWords].name
+    }
+    
+    private func getDownTitleAfterPressMarkButton() -> String {
+        return firstShowTranslate ? "" : shuffleWords[indexShuffleWords].transcription
     }
 }
