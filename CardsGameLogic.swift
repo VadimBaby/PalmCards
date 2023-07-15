@@ -44,4 +44,26 @@ class CardsGameLogic: ObservableObject {
     func getPercentRightAnswers() -> CGFloat {
         return CGFloat(Double(countRightAnswers) / Double(lastIndexElement + 1))
     }
+    
+    func pressFlipButton() {
+        upTitle = getUpTitleAfterPressFlipButton()
+        title = getTitleAfterPressFlipButton()
+        downTitle = getDownTitleAfterPressFlipButton()
+    }
+    
+    // After Press Flip Button
+    
+    private func getUpTitleAfterPressFlipButton() -> String {
+        guard !hideExample else { return "" }
+        
+        return firstShowTranslate ? shuffleWords[indexShuffleWords].examples : shuffleWords[indexShuffleWords].translateExamples
+    }
+    
+    private func getTitleAfterPressFlipButton() -> String {
+        return firstShowTranslate ? shuffleWords[indexShuffleWords].name : shuffleWords[indexShuffleWords].translate
+    }
+    
+    private func getDownTitleAfterPressFlipButton() -> String {
+        return firstShowTranslate ? shuffleWords[indexShuffleWords].transcription : ""
+    }
 }
