@@ -99,7 +99,7 @@ struct PlayView: View {
                         EmptyView()
                     })
                     .navigationDestination(isPresented: $doCardsNavigate) {
-                        CardsPlayingView()
+                        CardsPlayingView(selectDictionaries: playViewModel.selectDictionaries, listWords: playViewModel.listWordsFromSelectDictionaries)
                     }
                     
                     NavigationLink(value: "WritePlayingView", label: {
