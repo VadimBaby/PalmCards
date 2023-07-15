@@ -69,6 +69,24 @@ class CardsGameLogic: ObservableObject {
         countWords -= 1
     }
     
+    func pressXmarkButton() {
+        toggleGuessMoment()
+        
+        countWrongAnswers += 1
+        shuffleWords.append(shuffleWords[indexShuffleWords])
+        countWords += 1
+        
+        guard shuffleWords.count - 1 > indexShuffleWords else { showResults = true; return }
+        
+        indexShuffleWords += 1
+        
+        upTitle = getUpTitleAfterPressMarkButton()
+        title = getTitleAfterPressMarkButton()
+        downTitle = getDownTitleAfterPressMarkButton()
+        
+        countWords -= 1
+    }
+    
     func toggleGuessMoment() {
         if guessMoment == .select {
             guessMoment = .rotate
