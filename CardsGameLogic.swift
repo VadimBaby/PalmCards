@@ -51,6 +51,14 @@ class CardsGameLogic: ObservableObject {
         downTitle = getDownTitleAfterPressFlipButton()
     }
     
+    func toggleGuessMoment() {
+        if guessMoment == .select {
+            guessMoment = .rotate
+        } else {
+            guessMoment = .select
+        }
+    }
+    
     // After Press Flip Button
     
     private func getUpTitleAfterPressFlipButton() -> String {
