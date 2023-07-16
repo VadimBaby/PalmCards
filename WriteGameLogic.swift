@@ -32,4 +32,8 @@ class WriteGameLogic: ObservableObject {
         showingTranscription = shuffleWords[0].transcription
         lastIndexElement = shuffleWords.count - 1
     }
+    
+    func getPercentRightAnswers() -> CGFloat {
+        return CGFloat(Double(countRightAnswers) / Double(lastIndexElement + 1))
+    }
 }
