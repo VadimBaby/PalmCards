@@ -21,4 +21,15 @@ class WriteGameLogic: ObservableObject {
     
     var lastIndexElement = 0
     
+    func startGame(listWords: [WordModel]){
+        shuffleWords = listWords.shuffled()
+        countWords = listWords.count
+        showResults = false
+        indexShuffleWords = 0
+        writingWord = ""
+        showingTranslate = shuffleWords[0].translate
+        rightWord = shuffleWords[0].name
+        showingTranscription = shuffleWords[0].transcription
+        lastIndexElement = shuffleWords.count - 1
+    }
 }
