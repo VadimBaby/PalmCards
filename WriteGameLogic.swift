@@ -47,6 +47,16 @@ class WriteGameLogic: ObservableObject {
         guessNextWord()
     }
     
+    func pressMissButton() {
+        countWrongAnswers += 1
+        shuffleWords.append(shuffleWords[indexShuffleWords])
+        countWords += 1
+        
+        guard shuffleWords.count - 1 > indexShuffleWords else { showResults = true; return }
+        
+        guessNextWord()
+    }
+    
     func guessNextWord(){
         indexShuffleWords += 1
         writingWord = ""
