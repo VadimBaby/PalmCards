@@ -106,7 +106,7 @@ struct PlayView: View {
                         EmptyView()
                     })
                     .navigationDestination(isPresented: $doWriteNavigate) {
-                        WritePlayingView()
+                        WritePlayingView(selectDictionaries: playViewModel.selectDictionaries, listWords: playViewModel.listWordsFromSelectDictionaries)
                     }
                 }
             }

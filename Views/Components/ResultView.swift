@@ -2,8 +2,7 @@
 //  ResultView.swift
 //  PalmCards
 //
-//  Created by Вадим Мартыненко on 15.07.2023.
-//
+// Created by Вадим Мартыненко on 16.07.2023.
 
 import SwiftUI
 
