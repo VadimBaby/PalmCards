@@ -36,4 +36,23 @@ class WriteGameLogic: ObservableObject {
     func getPercentRightAnswers() -> CGFloat {
         return CGFloat(Double(countRightAnswers) / Double(lastIndexElement + 1))
     }
+    
+    func pressNextButton() {
+        if indexShuffleWords <= lastIndexElement  {
+            countRightAnswers += 1
+        }
+        
+        guard shuffleWords.count - 1 > indexShuffleWords else { showResults = true; return }
+        
+        guessNextWord()
+    }
+    
+    func guessNextWord(){
+        indexShuffleWords += 1
+        writingWord = ""
+        showingTranslate = shuffleWords[indexShuffleWords].translate
+        rightWord = shuffleWords[indexShuffleWords].name
+        showingTranscription = shuffleWords[indexShuffleWords].transcription
+        countWords -= 1
+    }
 }
