@@ -27,6 +27,7 @@ struct SettingsView: View {
                             }
                         }
                         .tint(Color.red)
+                        Toggle("Отключить вибрацию", isOn: $settings.isOffVibrate)
                     }
                     .tint(Color.red)
                 }
