@@ -11,12 +11,16 @@ import SwiftUI
 class HapticManager {
     static let instance = HapticManager()
     
-    func success() {
+    func success(isOffVibrate: Bool) {
+        guard !isOffVibrate else { return }
+        
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
     }
     
-    func wrong() {
+    func wrong(isOffVibrate: Bool) {
+        guard !isOffVibrate else { return }
+        
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.error)
     }
@@ -28,6 +32,8 @@ struct WritePlayingView: View {
     let listWords: [WordModel]
     
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
+    
+    @EnvironmentObject var settings: Settings
     
     @StateObject var gameLogic: WriteGameLogic = WriteGameLogic()
     
@@ -145,8 +151,11 @@ struct WritePlayingView: View {
         disableButtonNext = true
         
         if gameLogic.writingWord.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() == gameLogic.rightWord.lowercased() {
+            
             textColor = Color.green
             showTranscription = true
+            
+            HapticManager.instance.success(isOffVibrate: settings.isOffVibrate)
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 textColor = Color.primary
@@ -161,6 +170,8 @@ struct WritePlayingView: View {
         } else {
             textColor = Color.red
             
+            HapticManager.instance.wrong(isOffVibrate: settings.isOffVibrate)
+            
             DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
                 textColor = Color.primary
                 disableButtonNext = false
@@ -174,6 +185,7 @@ struct WritePlayingView_Previews: PreviewProvider {
         NavigationStack{
             WritePlayingView(selectDictionaries: ["1"], listWords: [WordModel(name: "asd", translate: "asd")])
                 .environmentObject(DictionaryViewModel())
+                .environmentObject(Settings())
         }
     }
 }
