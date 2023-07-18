@@ -7,6 +7,21 @@
 
 import SwiftUI
 
+
+class HapticManager {
+    static let instance = HapticManager()
+    
+    func success() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+    }
+    
+    func wrong() {
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.error)
+    }
+}
+
 struct WritePlayingView: View {
     
     let selectDictionaries: [String]
