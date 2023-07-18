@@ -41,6 +41,12 @@ class Settings: ObservableObject {
         }
     }
     
+    @Published var isOffVibrate: Bool = false {
+        didSet {
+            UserDefaults.standard.set(isOffVibrate, forKey: "isOffVibrate")
+        }
+    }
+    
     func getAllCasesTypesGame() -> [TypesGame] {
         return TypesGame.allCases
     }
@@ -48,6 +54,7 @@ class Settings: ObservableObject {
     init() {
         firstShowTranslate = UserDefaults.standard.bool(forKey: "firstShowTranslate")
         hideExample = UserDefaults.standard.bool(forKey: "hideExample")
+        isOffVibrate = UserDefaults.standard.bool(forKey: "isOffVibrate")
         
         if let checkSelectTypeOfGame = UserDefaults.standard.string(forKey: "selectTypeOfGame") {
             if checkSelectTypeOfGame == "cards" {
