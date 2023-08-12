@@ -36,9 +36,7 @@ class RemindNotificationManager: ObservableObject {
         getEntities()
     }
     
-    func getNextRemindNotificationInHours(lastRemindInHours: Int?) -> Int {
-        
-        guard let lastRemindInHours = lastRemindInHours else { return 0 }
+    func getNextRemindNotificationInHours(lastRemindInHours: Int = 0) -> Int {
         
         switch lastRemindInHours {
         
