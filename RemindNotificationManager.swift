@@ -9,6 +9,7 @@ import Foundation
 import CoreData
 
 class RemindNotificationManager: ObservableObject {
+    @Published var dictionaryViewModel = DictionaryViewModel()
     
     let notificationManager = NotificationManager.instance
     
@@ -20,38 +21,43 @@ class RemindNotificationManager: ObservableObject {
         getEntities()
     }
     
-    func sendNotification(idDictionary: String, nameDictionary: String) {
-        guard let notificationItem = saveEntities.first(where: {$0.dictionaryID == idDictionary}) else {
-            createNewDictionary(idDictionary: idDictionary, nameDictionary: nameDictionary)
+    func sendNotification(selectDictionaries: [String]) {
+        selectDictionaries.forEach { idDictionary in
             
-            return;
-        }
+            let nameDictionary = dictionaryViewModel.getDictionary(id: idDictionary).name
+            
+            guard let notificationItem = saveEntities.first(where: {$0.dictionaryID == idDictionary}) else {
+                createNewDictionary(idDictionary: idDictionary, nameDictionary: nameDictionary)
+                
+                return;
+            }
 
-        let repeatTime = Date()
-        
-        guard let lastLearnAfterNotification = notificationItem.lastLearnAfterNotification else { return }
-        
-        let dateDiffInHours = repeatTime.timeIntervalSince(lastLearnAfterNotification) / 60 / 60
-        
-        let dateDiffInHoursInt = Int(dateDiffInHours)
-        
-        let intervalForNextNotificationInHoursInt = Int(notificationItem.intervalForNextNotificationInHours)
-        
-        if dateDiffInHoursInt > intervalForNextNotificationInHoursInt {
+            let repeatTime = Date()
             
-            let newInterval = getNextRemindNotificationInHours(lastRemindInHours: intervalForNextNotificationInHoursInt)
+            guard let lastLearnAfterNotification = notificationItem.lastLearnAfterNotification else { return }
             
-            notificationManager.scheduleNotification(nameDictionary: nameDictionary, inHours: newInterval)
+            let dateDiffInHours = repeatTime.timeIntervalSince(lastLearnAfterNotification) / 60 / 60
             
-            notificationItem.lastLearn = repeatTime
-            notificationItem.lastLearnAfterNotification = repeatTime
-            notificationItem.intervalForNextNotificationInHours = Int16(newInterval)
+            let dateDiffInHoursInt = Int(dateDiffInHours)
             
-        } else {
-            notificationItem.lastLearn = repeatTime
+            let intervalForNextNotificationInHoursInt = Int(notificationItem.intervalForNextNotificationInHours)
+            
+            if dateDiffInHoursInt > intervalForNextNotificationInHoursInt {
+                
+                let newInterval = getNextRemindNotificationInHours(lastRemindInHours: intervalForNextNotificationInHoursInt)
+                
+                notificationManager.scheduleNotification(nameDictionary: nameDictionary, inHours: newInterval)
+                
+                notificationItem.lastLearn = repeatTime
+                notificationItem.lastLearnAfterNotification = repeatTime
+                notificationItem.intervalForNextNotificationInHours = Int16(newInterval)
+                
+            } else {
+                notificationItem.lastLearn = repeatTime
+            }
+            
+            saveContext()
         }
-        
-        saveContext()
     }
     
     func createNewDictionary(idDictionary: String, nameDictionary: String) {
