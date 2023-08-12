@@ -20,6 +20,9 @@ struct PalmCardsApp: App {
                 .environmentObject(dictionaryViewModel)
                 .environmentObject(settings)
                 .environmentObject(remindNotificationManager)
+                .onAppear{
+                    NotificationManager.instance.requestAuthorization()
+                }
         }
     }
 }

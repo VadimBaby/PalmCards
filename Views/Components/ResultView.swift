@@ -7,11 +7,15 @@
 import SwiftUI
 
 struct ResultView: View {
+    var selectDictionaries: [String]
+    
     var countRigthAnswers: Int
     var countWrongAnswers: Int
     var percentRightAnswers: CGFloat
     
     var pressCloseButton: () -> Void
+    
+    @EnvironmentObject var remindNotificationManager: RemindNotificationManager
     
     @State var percent: CGFloat = 0
     
@@ -58,12 +62,17 @@ struct ResultView: View {
         }
         .onAppear{
             percent = percentRightAnswers
+            
+            if percentRightAnswers == 1 {
+                remindNotificationManager.sendNotification(selectDictionaries: selectDictionaries)
+            }
         }
     }
 }
 
 struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
-        ResultView(countRigthAnswers: 1, countWrongAnswers: 1, percentRightAnswers: 1){}
+        ResultView(selectDictionaries: ["1"], countRigthAnswers: 1, countWrongAnswers: 1, percentRightAnswers: 1){}
+            .environmentObject(RemindNotificationManager())
     }
 }

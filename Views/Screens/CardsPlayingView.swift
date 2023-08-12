@@ -31,6 +31,7 @@ struct CardsPlayingView: View {
                 GameView
             } else {
                 ResultView(
+                    selectDictionaries: selectDictionaries,
                     countRigthAnswers: gameLogic.countRightAnswers,
                     countWrongAnswers: gameLogic.countWrongAnswers,
                     percentRightAnswers: gameLogic.getPercentRightAnswers()
