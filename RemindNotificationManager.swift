@@ -20,6 +20,58 @@ class RemindNotificationManager: ObservableObject {
         getEntities()
     }
     
+    func sendNotification(idDictionary: String, nameDictionary: String) {
+        guard let notificationItem = saveEntities.first(where: {$0.dictionaryID == idDictionary}) else {
+            createNewDictionary(idDictionary: idDictionary, nameDictionary: nameDictionary)
+            
+            return;
+        }
+
+        let repeatTime = Date()
+        
+        guard let lastLearnAfterNotification = notificationItem.lastLearnAfterNotification else { return }
+        
+        let dateDiffInHours = repeatTime.timeIntervalSince(lastLearnAfterNotification) / 60 / 60
+        
+        let dateDiffInHoursInt = Int(dateDiffInHours)
+        
+        let intervalForNextNotificationInHoursInt = Int(notificationItem.intervalForNextNotificationInHours)
+        
+        if dateDiffInHoursInt > intervalForNextNotificationInHoursInt {
+            
+            let newInterval = getNextRemindNotificationInHours(lastRemindInHours: intervalForNextNotificationInHoursInt)
+            
+            notificationManager.scheduleNotification(nameDictionary: nameDictionary, inHours: newInterval)
+            
+            notificationItem.lastLearn = repeatTime
+            notificationItem.lastLearnAfterNotification = repeatTime
+            notificationItem.intervalForNextNotificationInHours = Int16(newInterval)
+            
+        } else {
+            notificationItem.lastLearn = repeatTime
+        }
+        
+        saveContext()
+    }
+    
+    func createNewDictionary(idDictionary: String, nameDictionary: String) {
+        let newNotificationEntity = NotificationEntity(context: coreDataManager.container.viewContext)
+        
+        let nowDate = Date()
+        
+        let nextInterval = getNextRemindNotificationInHours()
+        
+        newNotificationEntity.dictionaryID = idDictionary
+        newNotificationEntity.dictionaryName = nameDictionary
+        newNotificationEntity.lastLearn = nowDate
+        newNotificationEntity.lastLearnAfterNotification = nowDate
+        newNotificationEntity.intervalForNextNotificationInHours = Int16(nextInterval)
+        
+        saveContext()
+        
+        notificationManager.scheduleNotification(nameDictionary: nameDictionary, inHours: nextInterval)
+    }
+    
     func getEntities() {
         let request = NSFetchRequest<NotificationEntity>(entityName: "NotificationEntity")
         
