@@ -23,9 +23,9 @@ class NotificationManager {
         }
     }
     
-    func scheduleNotification(title: String, inHours: Int) {
+    func scheduleNotification(nameDictionary: String, inHours: Int) {
         let content = UNMutableNotificationContent()
-        content.title = title
+        content.title = "Вам пора повторить слова из \(nameDictionary)"
         content.sound = .default
         
         let dateNow = Date()
