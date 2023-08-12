@@ -32,7 +32,7 @@ class NotificationManager {
         
         guard let dateNowInSecond = Calendar.current.date(byAdding: .hour, value: inHours, to: dateNow) else { return }
         
-        let dateNowIsSecondComponent = Calendar.current.dateComponents([.year, .month, .day], from: dateNowInSecond)
+        let dateNowIsSecondComponent = Calendar.current.dateComponents([.year, .month, .day, .hour], from: dateNowInSecond)
         
         let calendarTrigger = UNCalendarNotificationTrigger(dateMatching: dateNowIsSecondComponent, repeats: false)
         
