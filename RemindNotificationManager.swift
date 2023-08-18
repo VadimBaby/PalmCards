@@ -42,7 +42,7 @@ class RemindNotificationManager: ObservableObject {
             
             let intervalForNextNotificationInHoursInt = Int(notificationItem.intervalForNextNotificationInHours)
             
-            if dateDiffInHoursInt > intervalForNextNotificationInHoursInt {
+            if dateDiffInHoursInt >= intervalForNextNotificationInHoursInt {
                 
                 let newInterval = getNextRemindNotificationInHours(lastRemindInHours: intervalForNextNotificationInHoursInt)
                 
@@ -65,7 +65,7 @@ class RemindNotificationManager: ObservableObject {
         
         let nowDate = Date()
         
-        let nextInterval = getNextRemindNotificationInHours()
+        let nextInterval = 0
         
         newNotificationEntity.dictionaryID = idDictionary
         newNotificationEntity.dictionaryName = nameDictionary
@@ -74,8 +74,6 @@ class RemindNotificationManager: ObservableObject {
         newNotificationEntity.intervalForNextNotificationInHours = Int16(nextInterval)
         
         saveContext()
-        
-        notificationManager.scheduleNotification(nameDictionary: nameDictionary, inHours: nextInterval)
     }
     
     func getEntities() {
