@@ -9,7 +9,6 @@ import Foundation
 import CoreData
 
 class RemindNotificationManager: ObservableObject {
-    @Published var dictionaryViewModel = DictionaryViewModel()
     
     let notificationManager = NotificationManager.instance
     
@@ -21,10 +20,10 @@ class RemindNotificationManager: ObservableObject {
         getEntities()
     }
     
-    func sendNotification(selectDictionaries: [String]) {
+    func sendNotification(selectDictionaries: [String], getNameDictionary: (_ id: String) -> String) {
         selectDictionaries.forEach { idDictionary in
             
-            let nameDictionary = dictionaryViewModel.getDictionary(id: idDictionary).name
+            let nameDictionary = getNameDictionary(idDictionary)
             
             guard let notificationItem = saveEntities.first(where: {$0.dictionaryID == idDictionary}) else {
                 createNewDictionary(idDictionary: idDictionary, nameDictionary: nameDictionary)
@@ -46,7 +45,7 @@ class RemindNotificationManager: ObservableObject {
                 
                 let newInterval = getNextRemindNotificationInHours(lastRemindInHours: intervalForNextNotificationInHoursInt)
                 
-                notificationManager.scheduleNotification(nameDictionary: nameDictionary, inHours: newInterval)
+                notificationManager.scheduleNotification(idDictionary: idDictionary, nameDictionary: nameDictionary, inHours: newInterval)
                 
                 notificationItem.lastLearn = repeatTime
                 notificationItem.lastLearnAfterNotification = repeatTime
@@ -65,7 +64,7 @@ class RemindNotificationManager: ObservableObject {
         
         let nowDate = Date()
         
-        let nextInterval = 0
+        let nextInterval = getNextRemindNotificationInHours()
         
         newNotificationEntity.dictionaryID = idDictionary
         newNotificationEntity.dictionaryName = nameDictionary
@@ -74,6 +73,8 @@ class RemindNotificationManager: ObservableObject {
         newNotificationEntity.intervalForNextNotificationInHours = Int16(nextInterval)
         
         saveContext()
+        
+        notificationManager.scheduleNotification(idDictionary: idDictionary, nameDictionary: nameDictionary, inHours: nextInterval)
     }
     
     func getEntities() {
@@ -96,7 +97,25 @@ class RemindNotificationManager: ObservableObject {
         
         switch lastRemindInHours {
         
+//        case 0:
+//            return 6
+            
         case 0:
+            return 1
+        
+        case 1:
+            return 2
+        
+        case 2:
+            return 3
+        
+        case 3:
+            return 4
+        
+        case 4:
+            return 5
+        
+        case 5:
             return 6
             
         case 6:

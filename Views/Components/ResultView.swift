@@ -17,6 +17,8 @@ struct ResultView: View {
     
     @EnvironmentObject var remindNotificationManager: RemindNotificationManager
     
+    @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
+    
     @State var percent: CGFloat = 0
     
     var body: some View {
@@ -64,7 +66,9 @@ struct ResultView: View {
             percent = percentRightAnswers
             
             if percentRightAnswers == 1 {
-                remindNotificationManager.sendNotification(selectDictionaries: selectDictionaries)
+                remindNotificationManager.sendNotification(selectDictionaries: selectDictionaries){ id in
+                    return dictionaryViewModel.getDictionary(id: id).name
+                }
             }
         }
     }
@@ -74,5 +78,6 @@ struct ResultView_Previews: PreviewProvider {
     static var previews: some View {
         ResultView(selectDictionaries: ["1"], countRigthAnswers: 1, countWrongAnswers: 1, percentRightAnswers: 1){}
             .environmentObject(RemindNotificationManager())
+            .environmentObject(DictionaryViewModel())
     }
 }
