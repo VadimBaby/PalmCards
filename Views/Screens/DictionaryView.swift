@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DictionaryView: View {
     @EnvironmentObject var dictionaryViewModel: DictionaryViewModel
+    @EnvironmentObject var remindNotificationManager: RemindNotificationManager
     
     @State var showSheet: Bool = false
     @State var search: String = ""
@@ -29,7 +30,9 @@ struct DictionaryView: View {
                                 Text(item.name)
                             }
                         }
-                        .onDelete(perform: dictionaryViewModel.deleteDictionary)
+                        .onDelete { indexSet in
+                            dictionaryViewModel.deleteDictionary(indexSet: indexSet, callBack: remindNotificationManager.removeDictionary)
+                        }
                         
                         if filteredDictionaries.isEmpty {
                             Spacer()
@@ -75,5 +78,6 @@ struct DictionaryView_Previews: PreviewProvider {
     static var previews: some View {
         DictionaryView()
             .environmentObject(DictionaryViewModel())
+            .environmentObject(RemindNotificationManager())
     }
 }

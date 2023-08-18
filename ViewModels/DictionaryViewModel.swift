@@ -41,12 +41,19 @@ class DictionaryViewModel: ObservableObject {
         }
     }
     
-    func deleteDictionary(indexSet: IndexSet) {
+    func deleteDictionary(indexSet: IndexSet, callBack: (_ idDictionary: String) -> Void) {
         guard let index = indexSet.first else { return }
         let entity = saveEntities[index]
+        
+        let idDictionary = entity.id
+        
         manager.container.viewContext.delete(entity)
         
         saveContext()
+        
+        guard let idDictionary = idDictionary else { return }
+        
+        callBack(idDictionary)
     }
     
     func addDictionary(name: String) {

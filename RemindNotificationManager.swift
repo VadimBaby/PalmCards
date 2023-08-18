@@ -77,6 +77,19 @@ class RemindNotificationManager: ObservableObject {
         notificationManager.scheduleNotification(idDictionary: idDictionary, nameDictionary: nameDictionary, inHours: nextInterval)
     }
     
+    func removeDictionary(idDictionary: String) {
+        
+        guard let notificationEntity = saveEntities.first(where: {$0.dictionaryID == idDictionary}) else { return }
+        
+        let timeIntervalString = String(notificationEntity.intervalForNextNotificationInHours)
+        
+        coreDataManager.container.viewContext.delete(notificationEntity)
+        
+        saveContext()
+        
+        notificationManager.cancelNotification(id: idDictionary + timeIntervalString)
+    }
+    
     func getEntities() {
         let request = NSFetchRequest<NotificationEntity>(entityName: "NotificationEntity")
         
