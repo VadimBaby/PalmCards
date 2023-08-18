@@ -71,22 +71,22 @@ struct ListWordsView: View {
         .navigationTitle(dictionary.name)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                EditButtonComponent(editMode: $editMode)
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    self.showRenameSheet = true
-                }, label: {
-                    Image(systemName: "pencil")
-                        .tint(Color.red)
-                })
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: {
-                    self.showAddSheet = true
-                }) {
-                    Image(systemName: "plus")
-                        .tint(Color.red)
+                HStack{
+                    EditButtonComponent(editMode: $editMode)
+                    
+                    Button(action: {
+                        self.showRenameSheet = true
+                    }, label: {
+                        Image(systemName: "pencil")
+                            .tint(Color.red)
+                    })
+                    
+                    Button(action: {
+                        self.showAddSheet = true
+                    }) {
+                        Image(systemName: "plus")
+                            .tint(Color.red)
+                    }
                 }
             }
         }
